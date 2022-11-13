@@ -11,4 +11,5 @@ import Foundation
 struct User: Codable {
     var name = ""
     var score = 0
+    var isCurrent = false
 }

@@ -12,7 +12,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var seconds = 15
+    var seconds = 3
     var timer = Timer()
     var isTimerRunning = false
     var userArr: [User] = []
@@ -37,13 +37,13 @@ class ViewController: UIViewController {
                     let firstTextField = alertController.textFields![0] as UITextField
                 
                 
-                self.userArr.append(User(name: firstTextField.text ?? ""))
+                self.userArr.append(User(name: firstTextField.text ?? "", isCurrent: true))
                 
                 Globals.UserDefaults.user = self.userArr
                 self.runTimer()
                 self.isTimerRunning = true
                 self.startButton.setTitle("\(self.tapCount)", for: .normal)
-
+                
             
             })
             
@@ -83,7 +83,13 @@ class ViewController: UIViewController {
         else {
             startButton.isEnabled = false
             timer.invalidate()
-            print(Globals.UserDefaults.user)
+            if let index = Globals.UserDefaults.user?.firstIndex(where: {$0.isCurrent == true}){
+                Globals.UserDefaults.user?[index].isCurrent = false
+                Globals.UserDefaults.user?[index].score = tapCount
+            }
+            
+            self.performSegue(withIdentifier: "resultVC", sender: nil)
+            
         }
         
     }
